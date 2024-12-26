@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="player-inputs">
+            <input type="text" id="player1" placeholder="Player 1 Name" />
+            <input type="text" id="player2" placeholder="Player 2 Name" />
+            <button class="start-btn" onclick="startGame()">Start Game</button>
+        </div>
+        <div class="scoreboard" id="scoreboard" style="display: none;">
+            <p id="score1">Player 1: 0</p>
+            <p id="score2">Player 2: 0</p>
+            <p id="turn">Turn: </p>
+        </div>
+        <div id="game" style="display: none;">
+            <div class="board" id="board">
+                <div class="cell" onclick="makeMove(0)"></div>
+                <div class="cell" onclick="makeMove(1)"></div>
+                <div class="cell" onclick="makeMove(2)"></div>
+                <div class="cell" onclick="makeMove(3)"></div>
+                <div class="cell" onclick="makeMove(4)"></div>
+                <div class="cell" onclick="makeMove(5)"></div>
+                <div class="cell" onclick="makeMove(6)"></div>
+                <div class="cell" onclick="makeMove(7)"></div>
+                <div class="cell" onclick="makeMove(8)"></div>
+            </div>
+            <div class="message" id="message"></div>
+            <button class="restart-btn" onclick="restartGame()">Restart</button>
+            <button class="home-btn" onclick="goHome()">Home</button>
+        </div>
+        <button class="theme-toggle-btn" onclick="toggleTheme()">Toggle Dark/Light Theme</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

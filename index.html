@@ -1,45 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
-<script defer src="script.js"></script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Tic Tac Toe | Play Now</title>
+  <meta name="description" content="Play a modern, responsive Tic Tac Toe game with multiple themes, sound effects, and attractive styling. Challenge a friend or the computer!" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>Tic Tac Toe</h1>
-        <div class="player-inputs">
-            <input type="text" id="player1" placeholder="Player 1 Name" />
-            <input type="text" id="player2" placeholder="Player 2 Name" />
-            <button class="start-btn" onclick="startGame()">Start Game</button>
-        </div>
-        <div class="scoreboard" id="scoreboard" style="display: none;">
-            <p id="score1">Player1: 0</p>
-            <p id="score2">Player2: 0</p>
-            <p id="turn">Turn: </p>
-        </div>
-        <div id="game" style="display: none;">
-            <div class="board" id="board">
-                <div class="cell" onclick="makeMove(0)"></div>
-                <div class="cell" onclick="makeMove(1)"></div>
-                <div class="cell" onclick="makeMove(2)"></div>
-                <div class="cell" onclick="makeMove(3)"></div>
-                <div class="cell" onclick="makeMove(4)"></div>
-                <div class="cell" onclick="makeMove(5)"></div>
-                <div class="cell" onclick="makeMove(6)"></div>
-                <div class="cell" onclick="makeMove(7)"></div>
-                <div class="cell" onclick="makeMove(8)"></div>
-            </div>
-            <div class="message" id="message"></div>
-            <button class="restart-btn" onclick="restartGame()">Restart</button>
-            <button class="home-btn" onclick="goHome()">Home</button>
-        </div>
-        <button class="theme-toggle-btn" onclick="toggleTheme()">Toggle Dark/Light Theme</button>
-    </div>
-    <script src="script.js"></script>
+<body data-theme="dark">
+  <!-- Background Music (auto-play, loop) -->
+  <audio id="bgMusic" loop autoplay>
+    <!-- Replace the source with your own background music URL -->
+    <source src="https://www.bensound.com/bensound-music/bensound-dubstep.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <!-- Sound Toggle Button -->
+  <button class="sound-toggle" onclick="toggleSound()">Sound: On</button>
+
+  <!-- Background overlay for contrast -->
+  <div class="overlay"></div>
+
+  <main class="container">
+    <header>
+      <h1>Tic Tac Toe</h1>
+    </header>
+
+    <!-- Starting Menu -->
+    <section class="main-menu">
+      <div class="player-inputs">
+        <input type="text" id="player1Input" placeholder="Enter Player 1 Name" aria-label="Player 1 Name" />
+        <input type="text" id="player2Input" placeholder="Enter Player 2 Name" aria-label="Player 2 Name" />
+      </div>
+      <div class="mode-selector">
+        <button class="mode-btn" onclick="setGameMode('player')">2 Players</button>
+        <button class="mode-btn" onclick="setGameMode('computer')">Vs Computer</button>
+      </div>
+      <div class="size-selector">
+        <button class="size-btn" onclick="setGridSize(3)">3x3</button>
+        <button class="size-btn" onclick="setGridSize(5)">5x5</button>
+      </div>
+      <button class="start-btn" onclick="initializeGame()">Start Game</button>
+    </section>
+
+    <!-- Game Section -->
+    <section class="game-container">
+      <div id="scoreboard" class="scoreboard">
+        <span id="score1"></span>
+        <span id="score2"></span>
+      </div>
+      <div id="gameMessage" class="game-message"></div>
+      <div id="board" class="board" role="grid"></div>
+      <div class="controls">
+        <button onclick="resetGame()">Restart</button>
+        <button onclick="returnToMenu()">Back to Menu</button>
+      </div>
+    </section>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">Change Theme</button>
+  </main>
 </body>
 </html>

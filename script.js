@@ -10,8 +10,49 @@ let scores = { 'X': 0, 'O': 0 };
 let player1Name = 'Player 1';
 let player2Name = 'Player 2';
 
-// Sound effect URL for click (replace with your preferred URL)
+// Sound effect URL for click
 const clickSoundUrl = 'https://www.myinstants.com/en/instant/mouse-click-84937/?utm_source=copy&utm_medium=share';
+
+// ===================== Q-Learning Variables =====================
+let qTable = {};          // Maps board state string to actions { "r,c": Q-value, ... }
+let computerEpisode = []; // Stores transitions: { state, action, nextState }
+const alpha = 0.5;        // Learning rate
+const gamma = 0.9;        // Discount factor
+let epsilon = 0.8;        // Exploration rate (starts high for easy level)
+
+// Global round counter to adjust difficulty over rounds
+let roundCount = 0;
+
+// Convert board (2D array) to a unique string representation
+function boardToState(board) {
+  return board.flat().map(cell => cell ? cell : '-').join('');
+}
+
+// Returns a list of available moves as strings "r,c"
+function getAvailableActions(board) {
+  let moves = [];
+  board.forEach((row, r) => {
+    row.forEach((cell, c) => {
+      if (!cell) moves.push(`${r},${c}`);
+    });
+  });
+  return moves;
+}
+
+// Returns a move (in "r,c" format) if placing 'player' there results in a win; otherwise null
+function immediateWinningMove(player) {
+  const moves = getAvailableActions(board);
+  for (let move of moves) {
+    let [r, c] = move.split(',').map(Number);
+    board[r][c] = player;  // simulate move
+    if (checkWin(player)) {
+      board[r][c] = null;  // undo move
+      return move;
+    }
+    board[r][c] = null;    // undo move
+  }
+  return null;
+}
 
 // ===================== Game Functions =====================
 function setGameMode(mode) {
@@ -42,6 +83,7 @@ function initializeGame() {
   document.getElementById('gameMessage').innerText = '';
   document.querySelector('.main-menu').style.display = 'none';
   document.querySelector('.game-container').style.display = 'block';
+  computerEpisode = []; // Clear previous episode data
   renderBoard();
 }
 
@@ -67,16 +109,23 @@ function handleMove(event) {
   const row = event.target.dataset.row;
   const col = event.target.dataset.col;
   if (board[row][col]) return;
+  
   board[row][col] = currentPlayer;
   event.target.innerText = currentPlayer;
+  
   if (checkWin(currentPlayer)) {
     displayMessage(`${getPlayerName(currentPlayer)} wins!`, 'win');
     speakWinner(getPlayerName(currentPlayer));
     scores[currentPlayer]++;
     updateScoreboard();
+    // If computer lost while playing, update Q-values with a negative reward
+    if (currentPlayer === 'X' && computerEpisode.length > 0) {
+      updateQValues(-1);
+    }
     setTimeout(resetGame, 1500);
   } else if (isBoardFull() || checkNoWinChance()) {
     displayMessage(`It's a draw!`, 'draw');
+    updateQValues(0);
     setTimeout(resetGame, 1500);
   } else {
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -86,29 +135,65 @@ function handleMove(event) {
   }
 }
 
+// Modified computerMove using Q-learning with added heuristic for blocking/winning
 function computerMove() {
-  let emptyCells = [];
-  board.forEach((row, r) => {
-    row.forEach((cell, c) => {
-      if (!cell) emptyCells.push({ r, c });
-    });
-  });
-  if (emptyCells.length > 0) {
-    const { r, c } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    board[r][c] = 'O';
-    renderBoard();
-    if (checkWin('O')) {
-      displayMessage(`${getPlayerName('O')} wins!`, 'win');
-      speakWinner(getPlayerName('O'));
-      scores['O']++;
-      updateScoreboard();
-      setTimeout(resetGame, 1500);
-    } else if (isBoardFull() || checkNoWinChance()) {
-      displayMessage(`It's a draw!`, 'draw');
-      setTimeout(resetGame, 1500);
-    } else {
-      currentPlayer = 'X';
+  const availableMoves = getAvailableActions(board);
+  const state = boardToState(board);
+  
+  let chosenMove;
+  // 1. Check if computer can win immediately
+  chosenMove = immediateWinningMove('O');
+  // 2. If not, check if computer needs to block player's win
+  if (!chosenMove) {
+    let blockMove = immediateWinningMove('X');
+    if (blockMove) {
+      chosenMove = blockMove;
     }
+  }
+  // 3. Otherwise, use Q-learning epsilon-greedy selection
+  if (!chosenMove) {
+    if (!(state in qTable)) {
+      qTable[state] = {};
+      availableMoves.forEach(move => {
+        qTable[state][move] = 0;
+      });
+    }
+    if (Math.random() < epsilon) {
+      chosenMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    } else {
+      let maxQ = -Infinity;
+      availableMoves.forEach(move => {
+        const qVal = qTable[state][move] !== undefined ? qTable[state][move] : 0;
+        if (qVal > maxQ) {
+          maxQ = qVal;
+          chosenMove = move;
+        }
+      });
+    }
+  }
+  
+  // Parse chosen move and update board
+  const [r, c] = chosenMove.split(',').map(Number);
+  board[r][c] = 'O';
+  renderBoard();
+  
+  // Compute next state after the move and record transition for learning
+  const nextState = boardToState(board);
+  computerEpisode.push({ state: state, action: chosenMove, nextState: nextState });
+  
+  if (checkWin('O')) {
+    displayMessage(`${getPlayerName('O')} wins!`, 'win');
+    speakWinner(getPlayerName('O'));
+    scores['O']++;
+    updateScoreboard();
+    updateQValues(1);  // Reward win with +1
+    setTimeout(resetGame, 1500);
+  } else if (isBoardFull() || checkNoWinChance()) {
+    displayMessage(`It's a draw!`, 'draw');
+    updateQValues(0);
+    setTimeout(resetGame, 1500);
+  } else {
+    currentPlayer = 'X';
   }
 }
 
@@ -152,9 +237,15 @@ function updateScoreboard() {
 }
 
 function resetGame() {
+  // Increase round count and adjust epsilon to decrease exploration (making AI tougher)
+  roundCount++;
+  // Decrease epsilon by 0.1 each round, down to a minimum of 0.2
+  epsilon = Math.max(0.2, 0.8 - (roundCount * 0.1));
+  
   board = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
   currentPlayer = 'X';
   document.getElementById('gameMessage').innerText = '';
+  computerEpisode = []; // Clear episode data for new game
   renderBoard();
 }
 
@@ -178,6 +269,22 @@ function getPlayerName(symbol) {
   return symbol === 'X' ? player1Name : player2Name;
 }
 
+// ===================== Q-Learning Q-Value Update =====================
+// For each computer move, update Q(s, a) = Q(s, a) + α*(target - Q(s, a))
+// where target = (for terminal move) reward or (for non-terminal) gamma * max_a Q(nextState, a)
+function updateQValues(finalReward) {
+  for (let i = computerEpisode.length - 1; i >= 0; i--) {
+    const { state, action, nextState } = computerEpisode[i];
+    let bestNextQ = 0;
+    if (nextState && qTable[nextState]) {
+      bestNextQ = Math.max(...Object.values(qTable[nextState]));
+    }
+    const target = (i === computerEpisode.length - 1) ? finalReward : gamma * bestNextQ;
+    qTable[state][action] = qTable[state][action] + alpha * (target - qTable[state][action]);
+  }
+  computerEpisode = [];
+}
+
 // ===================== Sound Effects =====================
 function playClickSound() {
   let clickAudio = new Audio(clickSoundUrl);
@@ -196,7 +303,6 @@ function toggleSound() {
   }
 }
 
-// Use speech synthesis to announce the winner's name
 function speakWinner(name) {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(`${name} wins!`);
@@ -204,30 +310,28 @@ function speakWinner(name) {
   }
 }
 
-/*--------------------------------------------------
-  MOBILE NAVIGATION TOGGLE (Hamburger Menu)
---------------------------------------------------*/
+// ------------------------------
+// MOBILE NAVIGATION TOGGLE (Hamburger Menu)
+// ------------------------------
 const menuToggle = document.getElementById("menuToggle");
 if (menuToggle) {
   menuToggle.addEventListener("click", function(e) {
     e.stopPropagation();
-    // Only toggle if screen width is less than 768px
     if (window.innerWidth < 768) {
       const navMenu = document.querySelector(".main-nav ul");
       if (navMenu) {
         if (navMenu.style.display === "flex") {
           navMenu.style.display = "none";
           menuToggle.classList.remove("active");
-          menuToggle.innerHTML = "&#9776;"; // hamburger icon
+          menuToggle.innerHTML = "&#9776;";
         } else {
           navMenu.style.display = "flex";
           menuToggle.classList.add("active");
-          menuToggle.innerHTML = "&times;"; // close icon
+          menuToggle.innerHTML = "&times;";
         }
       }
     }
   });
-  // Hide nav menu when clicking outside (for mobile)
   document.addEventListener("click", function(e) {
     if (window.innerWidth < 768) {
       const navMenu = document.querySelector(".main-nav ul");
@@ -239,7 +343,6 @@ if (menuToggle) {
     }
   });
 }
-// On window resize, ensure nav is shown on larger screens
 window.addEventListener("resize", function() {
   if (window.innerWidth >= 768) {
     const navMenu = document.querySelector(".main-nav ul");

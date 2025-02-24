@@ -203,3 +203,48 @@ function speakWinner(name) {
     window.speechSynthesis.speak(utterance);
   }
 }
+
+/*--------------------------------------------------
+  MOBILE NAVIGATION TOGGLE (Hamburger Menu)
+--------------------------------------------------*/
+const menuToggle = document.getElementById("menuToggle");
+if (menuToggle) {
+  menuToggle.addEventListener("click", function(e) {
+    e.stopPropagation();
+    // Only toggle if screen width is less than 768px
+    if (window.innerWidth < 768) {
+      const navMenu = document.querySelector(".main-nav ul");
+      if (navMenu) {
+        if (navMenu.style.display === "flex") {
+          navMenu.style.display = "none";
+          menuToggle.classList.remove("active");
+          menuToggle.innerHTML = "&#9776;"; // hamburger icon
+        } else {
+          navMenu.style.display = "flex";
+          menuToggle.classList.add("active");
+          menuToggle.innerHTML = "&times;"; // close icon
+        }
+      }
+    }
+  });
+  // Hide nav menu when clicking outside (for mobile)
+  document.addEventListener("click", function(e) {
+    if (window.innerWidth < 768) {
+      const navMenu = document.querySelector(".main-nav ul");
+      if (navMenu && !navMenu.contains(e.target) && e.target.id !== "menuToggle") {
+        navMenu.style.display = "none";
+        menuToggle.classList.remove("active");
+        menuToggle.innerHTML = "&#9776;";
+      }
+    }
+  });
+}
+// On window resize, ensure nav is shown on larger screens
+window.addEventListener("resize", function() {
+  if (window.innerWidth >= 768) {
+    const navMenu = document.querySelector(".main-nav ul");
+    if (navMenu) {
+      navMenu.style.display = "flex";
+    }
+  }
+});

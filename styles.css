@@ -1,3 +1,140 @@
+/*------------------------------------------------------
+  HEADER & Navigation
+------------------------------------------------------*/
+header {
+  padding: 1.5rem 1rem;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  position: relative;
+  z-index: 100; /* Ensure header is above other content */
+}
+
+.header-logo {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.news-header .header-logo {
+  width: 50px; /* Smaller logo for news page */
+}
+
+.site-logo {
+  width: 100%;
+  height: auto;
+  border-radius: 50%; /* Circular logo */
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.header-content p,
+header p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+/* Tagline styling */
+.header-content .tagline {
+  font-size: 1.2rem;
+  color: #ccc;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Navigation */
+.main-nav {
+  margin-left: auto;
+  position: relative;
+  z-index: 110; /* Place nav above announcement */
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Mobile Hamburger Toggle Button */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 2.5rem; /* Larger icon */
+  color: var(--text-color);
+  transition: transform 0.3s ease;
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  z-index: 120;
+}
+
+.menu-toggle.active {
+  transform: rotate(90deg);
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: var(--text-color);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: var(--accent-color);
+  transform: translateY(-3px);
+}
+
+/* Responsive Navigation: show hamburger and vertical menu */
+@media (max-width: 768px) {
+  .main-nav ul {
+    display: none;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.9);
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    padding: 1rem;
+    border-radius: 0 0 5px 5px;
+    animation: slideDownMenu 0.3s ease-out;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+@keyframes slideDownMenu {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/*------------------------------------------------------
+  Base Styles and Game Styles (existing styles)
+------------------------------------------------------*/
+
+:root {
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --text-color: #ffffff;
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --cell-bg: rgba(255, 255, 255, 0.2);
+  --border-color: rgba(255, 255, 255, 0.5);
+  --container-bg: rgba(0, 0, 0, 0.65);
+  --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --transition-speed: 0.3s;
+}
 /* ===================== Global & Theme Variables ===================== */
 
 /* Default (Dark) Theme */
@@ -223,12 +360,13 @@ header h1 {
   opacity: 0.9;
 }
 
-/* Theme Toggle Button */
+/*------------------------------------------------------
+  Theme Toggle Button (Updated)
+------------------------------------------------------*/
 .theme-toggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 3;
+  /* Removed fixed positioning so it flows under the header */
+  display: inline-block;
+  margin: 1rem auto;  /* Center horizontally with margin */
   padding: 10px 16px;
   font-size: 14px;
   border: none;
@@ -238,6 +376,11 @@ header h1 {
   cursor: pointer;
   font-weight: bold;
   transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+/* Optional: Center the button by applying text-align center to its parent container */
+body {
+  text-align: center;
 }
 .theme-toggle:hover {
   transform: scale(1.05);

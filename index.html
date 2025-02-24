@@ -9,25 +9,38 @@
   <script defer src="script.js"></script>
 </head>
 <body data-theme="dark">
-  <!-- Background Music (auto-play, loop) -->
+  <!-- HEADER -->
+  <header class="news-header">
+    <div class="header-logo">
+      <img src="https://i.ibb.co/0pjPXpZy/thrillyverse.png" alt="ThrillyVerse Logo" class="site-logo" />
+    </div>
+    <div class="header-content">
+      <h1>ThrillyVerse</h1>
+      <p class="tagline">Think Beyond The Verse</p>
+    </div>
+    <!-- Hamburger toggle button visible on small screens -->
+    <button id="menuToggle" class="menu-toggle" aria-label="Toggle Navigation">&#9776;</button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="https://dearestwall.github.io/ThrillyVerse/home.html">Home</a></li>
+        <li><a href="https://dearestwall.github.io/ThrillyVerse/news.html">News</a></li>
+        <li><a href="https://dearestwall.github.io/ThrillyVerse/material.html" class="active">ICSE Material</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  
+  <!-- Background Music, Sound Toggle, Overlay, and Game Content -->
   <audio id="bgMusic" loop autoplay>
-  <!-- Updated background music URL to a more pleasant track -->
-  <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+    <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-  <!-- Sound Toggle Button -->
   <button class="sound-toggle" onclick="toggleSound()">Sound: On</button>
-
-  <!-- Background overlay for contrast -->
   <div class="overlay"></div>
 
   <main class="container">
-    <header>
-      <h1>Tic Tac Toe</h1>
-    </header>
-
-    <!-- Starting Menu -->
+    <!-- (Optional: Remove or repurpose the in-container header if you prefer the top header to be the sole header) -->
     <section class="main-menu">
       <div class="player-inputs">
         <input type="text" id="player1Input" placeholder="Enter Player 1 Name" aria-label="Player 1 Name" />

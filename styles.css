@@ -36,6 +36,7 @@ header {
 header h1 {
   font-size: 2.5rem;
   margin-bottom: 0.25rem;
+  color: #ccc;
 }
 
 .header-content p,
@@ -119,287 +120,395 @@ header p {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-/*------------------------------------------------------
-  Base Styles and Game Styles (existing styles)
-------------------------------------------------------*/
-
+/* General Styling */
 :root {
-  --bg-overlay: rgba(0, 0, 0, 0.5);
-  --text-color: #ffffff;
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --cell-bg: rgba(255, 255, 255, 0.2);
-  --border-color: rgba(255, 255, 255, 0.5);
-  --container-bg: rgba(0, 0, 0, 0.65);
-  --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --transition-speed: 0.3s;
-}
-/* ===================== Global & Theme Variables ===================== */
-
-/* Default (Dark) Theme */
-:root {
-  --bg-overlay: rgba(0, 0, 0, 0.5);
-  --text-color: #ffffff;
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --cell-bg: rgba(255, 255, 255, 0.2);
-  --border-color: rgba(255, 255, 255, 0.5);
-  --container-bg: rgba(0, 0, 0, 0.65);
-  --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --transition-speed: 0.3s;
+  --primary-gradient: linear-gradient(135deg, #1d2b64, #f8cdda);
+  --secondary-gradient: linear-gradient(135deg, #4e4376, #2b5876);
+  --highlight-color: #f8cdda;
+  --highlight-active: rgba(255, 223, 186, 0.8);
+  --background-dark: rgba(0, 0, 0, 0.8);
+  --white: #ffffff;
+  --black: #000000;
+  --font-primary: "Poppins", sans-serif;
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.3);
+  --shadow-heavy: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Light Theme */
-body[data-theme="light"] {
-  --text-color: #333333;
-  --primary-color: #4caf50;
-  --secondary-color: #8bc34a;
-  --cell-bg: rgba(200, 200, 200, 0.8);
-  --border-color: rgba(180, 180, 180, 0.8);
-  --container-bg: rgba(255, 255, 255, 0.9);
+/* Highlight Text Styling */
+.highlight {
+  background-color: var(--highlight-active);
+  color: #070;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0 5px;
+  transition: all 0.3s ease-in-out;
+}
+.highlight:hover {
+  background-color: var(--highlight-color);
+  color: var(--black);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Blue Theme */
-body[data-theme="blue"] {
-  --text-color: #ffffff;
-  --primary-color: #2196f3;
-  --secondary-color: #64b5f6;
-  --cell-bg: rgba(33, 150, 243, 0.2);
-  --border-color: rgba(33, 150, 243, 0.5);
-  --container-bg: rgba(0, 0, 0, 0.7);
-}
-
-/* Green Theme */
-body[data-theme="green"] {
-  --text-color: #ffffff;
-  --primary-color: #4caf50;
-  --secondary-color: #81c784;
-  --cell-bg: rgba(76, 175, 80, 0.2);
-  --border-color: rgba(76, 175, 80, 0.5);
-  --container-bg: rgba(0, 0, 0, 0.7);
-}
-
-/* Purple Theme */
-body[data-theme="purple"] {
-  --text-color: #ffffff;
-  --primary-color: #9c27b0;
-  --secondary-color: #ba68c8;
-  --cell-bg: rgba(156, 39, 176, 0.2);
-  --border-color: rgba(156, 39, 176, 0.5);
-  --container-bg: rgba(0, 0, 0, 0.7);
-}
-
-/* ===================== Base Styles ===================== */
+/* Body */
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-primary);
   margin: 0;
   padding: 0;
-  background: url('https://images.unsplash.com/photo-1502671507588-04ff77eae3fe') no-repeat center center fixed;
-  background-size: cover;
-  position: relative;
-  color: var(--text-color);
+  background: var(--primary-gradient);
+  color: var(--white);
   overflow-x: hidden;
 }
 
-.overlay {
+/* Header Styling */
+h1 {
+  font-size: 4rem;
+  color: transparent;
+  background: url("https://www.cjs-cdkeys.com/product_images/uploaded_images/minecraft-java.jpg")
+    no-repeat center;
+  background-size: cover;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin: 20px auto;
+  text-align: center;
+  animation: float 3s infinite ease-in-out;
+}
+
+h2,
+h3 {
+  font-size: 1.5rem;
+  color: transparent;
+  background: url("https://www.cjs-cdkeys.com/product_images/uploaded_images/minecraft-java.jpg")
+    no-repeat center;
+  background-size: cover;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: float 3s infinite ease-in-out;
+  margin: 20px auto;
+}
+
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Fade Out Animation for Modal Close */
+@keyframes fadeOutModal {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Episode Grid */
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.episode-card {
+  background: var(--background-dark);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.episode-card:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-heavy);
+}
+
+.episode-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Episode Title */
+.episode-title {
+  font-size: 1.5rem;
+  color: var(--highlight-color);
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.episode-title:hover {
+  color: #f4a261;
+  text-decoration: underline;
+}
+
+/* Buttons in Episode Cards (if any) */
+.episode-button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: var(--white);
+  background: linear-gradient(135deg, #4caf50, #3e8e41);
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.episode-button:hover {
+  background: linear-gradient(135deg, #3e8e41, #4caf50);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-heavy);
+}
+
+/* Modal Styling */
+.modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--bg-overlay);
-  z-index: 0;
-}
-
-/* Sound Toggle Button */
-.sound-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: var(--text-color);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  z-index: 3;
-  cursor: pointer;
-  font-weight: bold;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-}
-.sound-toggle:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-/* Container */
-.container {
-  position: relative;
-  z-index: 2;
-  max-width: 400px;
-  width: 90%;
-  margin: 20px auto;
-  background-color: var(--container-bg);
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  text-align: center;
-}
-
-/* Header */
-header h1 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* ===================== Main Menu ===================== */
-.main-menu {
-  margin-bottom: 1rem;
-}
-
-.player-inputs input {
-  width: 45%;
-  padding: 6px;
-  margin: 0.3rem;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.mode-selector, .size-selector {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin: 0.5rem 0;
-}
-
-.mode-btn, .size-btn, .start-btn {
-  padding: 6px 12px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-  transition: background-color var(--transition-speed);
-}
-
-.mode-btn.active, .size-btn.active, .start-btn:hover {
-  background-color: var(--primary-color);
-}
-
-/* ===================== Game Container ===================== */
-.game-container {
+  background: rgba(0, 0, 0, 0.8);
   display: none;
-}
-
-/* Scoreboard */
-.scoreboard {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-/* Game Message */
-.game-message {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 10px;
-  font-weight: bold;
-  min-height: 30px;
+  justify-content: center;
+  align-items: center;
   animation: fadeIn 0.5s;
 }
 
-/* Board */
-.board {
-  display: grid;
-  gap: 4px;
-  margin: 0 auto 15px auto;
-  max-width: 300px;
-}
-.cell {
-  aspect-ratio: 1;
-  background-color: var(--cell-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 6px;
+.modal.open {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-.cell:hover {
-  transform: scale(1.05);
-  background-color: rgba(255,255,255,0.3);
 }
 
-/* Controls */
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 10px;
+/* Modal Content */
+.modal-content {
+  background: var(--secondary-gradient);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 800px;
+  color: var(--white);
+  animation: zoomIn 0.5s ease-out;
+  font-family: var(--font-primary);
+  overflow: hidden;
 }
-.controls button {
-  padding: 6px 12px;
-  font-size: 14px;
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+}
+
+.modal-header h2 {
+  font-size: 2rem;
+  color: var(--highlight-color);
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Buttons in Modal Header */
+button.listen-button,
+button.pause-button,
+button.resume-button,
+button.close-btn {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  margin: 0 5px;
+}
+
+button.listen-button:hover,
+button.pause-button:hover,
+button.resume-button:hover,
+button.close-btn:hover {
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+button.listen-button {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+}
+button.listen-button:hover {
+  background: linear-gradient(135deg, #1976d2, #2196f3);
+}
+button.pause-button {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+button.pause-button:hover {
+  background: linear-gradient(135deg, #d32f2f, #f44336);
+}
+button.resume-button {
+  background: linear-gradient(135deg, #8bc34a, #7cb342);
+}
+button.resume-button:hover {
+  background: linear-gradient(135deg, #7cb342, #8bc34a);
+}
+button.close-btn {
+  background: #f39c12;
+  color: #000;
+  font-size: 1rem;
+  padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: background 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
-.controls button:hover {
+button.close-btn:hover {
+  background: #f39a9a;
   transform: scale(1.05);
-  opacity: 0.9;
+}
+button.close-btn:focus {
+  outline: none;
 }
 
-/*------------------------------------------------------
-  Theme Toggle Button (Updated)
-------------------------------------------------------*/
-.theme-toggle {
-  /* Removed fixed positioning so it flows under the header */
-  display: inline-block;
-  margin: 1rem auto;  /* Center horizontally with margin */
-  padding: 10px 16px;
-  font-size: 14px;
+.modal-body {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 15px;
+}
+
+.modal-footer button {
+  background: linear-gradient(135deg, #f39c12, #e74c3c);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 12px 20px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: var(--text-color);
   cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   font-weight: bold;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  width: 45%;
 }
 
-/* Optional: Center the button by applying text-align center to its parent container */
-body {
+.modal-footer button:hover {
+  background: linear-gradient(135deg, #e74c3c, #f39c12);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-footer button:focus {
+  outline: none;
+}
+
+/* Footer */
+footer {
   text-align: center;
-}
-.theme-toggle:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-/* ===================== Animations ===================== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  padding: 10px;
+  background: linear-gradient(45deg, #2c3e50, #4ca1af);
+  color: var(--white);
+  box-shadow: var(--shadow-light);
+  border-top: 3px solid #e74c3c;
 }
 
-/* ===================== Responsive ===================== */
-@media (max-width: 600px) {
-  .container { max-width: 95%; padding: 0.8rem; }
-  header h1 { font-size: 1.5rem; }
-  .player-inputs input { font-size: 12px; padding: 4px; }
-  .mode-btn, .size-btn, .start-btn, .controls button, .theme-toggle, .sound-toggle { font-size: 12px; padding: 4px 8px; }
-  .scoreboard { font-size: 14px; }
-  .game-message { font-size: 20px; }
-  .cell { font-size: 22px; }
+footer p {
+  font-size: 1rem;
+  margin: 0;
+  animation: fadeIn 3s ease-in-out;
+}
+
+footer span {
+  font-weight: bold;
+  color: #f39c12;
+  text-shadow: 1px 1px 0px #e74c3c, 2px 2px 0px #3498db;
+}
+
+/* Responsive Iframes (for embedded content) */
+iframe {
+  max-width: 100%;
+  height: auto;
+  border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2,
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .episode-title {
+    font-size: 1.2rem;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .episode-card img {
+    height: 150px;
+  }
+}
+
+/* Additional breakpoint for very small devices */
+@media (max-width: 480px) {
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal-body {
+    font-size: 1rem;
+  }
 }
